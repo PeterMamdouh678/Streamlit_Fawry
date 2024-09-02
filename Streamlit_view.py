@@ -26,7 +26,13 @@ st.title("Phone Number Data Scraper")
 Times = 1
 # server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # server.bind(("0.0.0.0",9999))
+result = subprocess.run(["adb", "devices"], stdout=subprocess.PIPE)
+output = result.stdout.decode("utf-8")
 
+# Extract device names (usually the first column in the output)
+device_lines = output.strip().split('\n')[1:] # Skip the first line 'List of devices attached'
+devices = [line.split()[0] for line in device_lines if "emulator" in line]
+print(devices[0])
 # server.listen()
 
 # while True:
@@ -56,7 +62,8 @@ if st.session_state.step == 1:
                 cap: Dict[str, Any] = {
                     "platformName": "Android",
                     "platformVersion": "14.0",
-                    "deviceName": "emulator-5554",
+                    # "deviceName": "emulator-5554",
+                    "devuceName" : devices[0],
                     "automationName": "UiAutomator2",
                     "appActivity": "com.emeint.android.mwallet2.view.StartupActivity",
                     "appPackage": "com.fawry.myfawry",
